@@ -27,6 +27,8 @@ const network = "sepolia";
     API_KEY
   );
 
+  const scrollProvider = new ethers.providers.JsonRpcProvider("https://sepolia-rpc.scroll.io/")
+
   
   //const provider_Metamask = new ethers.providers.Web3Provider(window.ethereum);
   /*const infuraProvider = new ethers.providers.InfuraProvider(
@@ -41,15 +43,21 @@ function App() {
 
   const [blockNumber, setBlockNumber] = useState(10);
   const [sepoliaBalance, setSepoliaBalance] = useState(0);
+  const [scrollBalance, setScrollBalance] = useState(0);
 
 
   useEffect(() => {
     (async () => {
       const latest_block = await provider.getBlockNumber("latest");
       setBlockNumber(latest_block);
+
+      
       
       const balance = await provider.getBalance(process.env.REACT_APP_PUBLIC_KEY);
       setSepoliaBalance(ethers.utils.formatEther(balance));
+
+      const scBalance = await scrollProvider.getBalance(process.env.REACT_APP_PUBLIC_KEY);
+      setScrollBalance(ethers.utils.formatEther(scBalance));
 
        
     })();
@@ -71,6 +79,7 @@ function App() {
         </p>
         <p>{blockNumber}</p>
         <p>{sepoliaBalance}</p>
+        <p>{scrollBalance}</p>
 
         <a
           className="App-link"
