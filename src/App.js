@@ -19,8 +19,9 @@ const { ethers } = require("ethers");
 }*/
 
 const network = "sepolia";
-  const API_KEY = process.env.REACT_APP_API_KEY;
+  const API_KEY = process.env.REACT_APP_INFURA_API_KEY;
   const PRIVATE_KEY = process.env.REACT_APP_PRIVATE_KEY;
+
   const provider = new ethers.providers.InfuraProvider(
     network,
     API_KEY
@@ -39,14 +40,18 @@ const network = "sepolia";
 function App() {
 
   const [blockNumber, setBlockNumber] = useState(10);
-  const [txSent, setTxSent] = useState(null);
-  const [txSentInfura, setTxSentInfura] = useState(null);
+  const [sepoliaBalance, setSepoliaBalance] = useState(0);
 
 
   useEffect(() => {
     (async () => {
       const latest_block = await provider.getBlockNumber("latest");
       setBlockNumber(latest_block);
+      
+      const balance = await provider.getBalance(process.env.REACT_APP_PUBLIC_KEY);
+      setSepoliaBalance(ethers.utils.formatEther(balance));
+
+       
     })();
 
     return () => {
@@ -65,6 +70,7 @@ function App() {
           Edit <code>src/App.js</code> and to reload.
         </p>
         <p>{blockNumber}</p>
+        <p>{sepoliaBalance}</p>
 
         <a
           className="App-link"
